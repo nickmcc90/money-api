@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-top: 30px;
+      padding-bottom: 30px;
+      color: white;
+      background: linear-gradient(to right, #000428, #000046);
+      min-height: 100vh;
+    }
+
+    .colu-1,
+    .colu-2,
+    .colu-3,
+    .colu-4,
+    .colu-5,
+    .colu-6,
+    .colu-7,
+    .detail-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .colu-1 {
+      row-gap: 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .colu-2,
+    .colu-3,
+    .colu-4,
+    .colu-5 {
+      row-gap: 10px;
+    }
+
+    .colu-6,
+    .colu-7 {
+      background-color: rgb(71, 61, 132);
+      padding: 20px;
+      height: 100%;
+      width: 100%;
+      row-gap: 10px;
+    }
+
+    .hori-1,
+    .hori-2,
+    .hori-3,
+    .hori-4,
+    .hori-5,
+    .hori-6,
+    .hori-7,
+    .circle-container,
+    .input-container,
+    .hori-8,
+    .hori-9,
+    .hori-10,
+    .checkout,
+    .hori-11,
+    .hori-12,
+    .hori-13 {
+      display: flex;
+    }
+
+    .hori-1,
+    .hori-5,
+    .hori-7,
+    .hori-8,
+    .input-container,
+    .hori-11,
+    .hori-13 {
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hori-2,
+    .hori-3,
+    .hori-4,
+    .hori-5,
+    .circle-container,
+    .hori-12,
+    .checkout {
+      column-gap: 15px;
+      align-items: center;
+    }
+    
+    .checkout {
+      width: 120px;
+    }
+
+    .status {
+      width: 150px
+    }
+
+    .hori-6 {
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      column-gap: 10px;
+      height: 325px;
+    }
+
+    .input-container {
+      background-color: #000046;
+      border: #01016c solid 3px;
+      position: relative;
+      padding: 4px
+    }
+
+    .input {
+      color: white;
+      background-color: transparent;
+      border: none;
+      width: 70%
+    }
+
+    .hori-9 {
+      background-color: yellowgreen;
+    }
+
+    .hori-9,
+    .hori-10 {
+      width: 90px;
+      column-gap: 10px;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border-radius: 15px;
+    }
+
+    .hori-10 {
+      background-color: rgb(0, 217, 217);
+    }
+
+    .hori-11 {
+      width: 80px;
+    }
+
+    .hori-11,
+    .status,
+    .checkout {
+      color: white;
+      background: hsla(200, 80%, 50%, 0.4);
+      border-radius: 6px;
+      border: none;
+      font-size: 0.8rem;
+      padding: 8px 16px;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    /* */
+
+    .purpose {
+      color: cyan;
+    }
+
+    .author {
+      color: cyan;
+    }
+
+    .example-API {
+      color: cyan;
+    }
+
+    .ensure {
+      color: coral;
+    }
+
+    .key-authed {
+      color: greenyellow
+    }
+
+    .green {
+      color: greenyellow;
+    }
+
+    .blue {
+      color: cyan
+    }
+
+  </style>
+</head>
+<body>
+  <div class="colu-1">
+    <div class="hori-1">
+      <h1>My Cool API</h1>
+      <button class="hori-11">
+        <i class="fa-solid fa-book"></i>
+        <div>Docs</div>
+      </button>
+    </div>
+    <div class="colu-2">
+      <h1>Description</h1>
+      <div class="hori-2">
+        <div class="purpose">Purpose</div>
+        <div>To encourage everyone to become a great developer!</div>
+      </div>
+      <div class="hori-3">
+        <div class="author">Author</div>
+        <div>nickmcc90</div>
+      </div>
+    </div>
+    <div class="colu-3">
+      <div class="colu-4">
+        <h1>Check Key Status</h1>
+        <div>Please enter your API key below to chekc its status</div>
+        <div class="ensure">Please ensure your API key is formatted correctly</div>
+        <div class="key-authed">API key authenticated</div>
+        <div class="hori-4">
+          <div class="example-API">Example API key</div>
+          <div>a;slkjdfklj34k66j43.q34l</div>
+        </div>
+      </div>
+      <div class="input-container">
+        <input class='input' type="text" placeholder="API key" />
+        <div class="circle-container">
+          <i class="fa-solid fa-circle"></i>
+          <i class="fa-regular fa-circle"></i>
+        </div>
+      </div>
+      <button class="hori-5 status">
+        <i class="fa-solid fa-check"></i>
+        <div>Check Status</div>
+      </button>
+    </div>
+    <div class="colu-5">
+      <h1>Billing plans</h1>
+      <div class="hori-6">
+        <div class="colu-6">
+          <div class="hori-7">
+            <h3><span class="green">Prepaid</span> Plan</h3>
+            <div class="hori-9">
+              <i class="fa-regular fa-circle-check"></i>
+              <div>Active</div>
+            </div>
+          </div>
+          <div class="detail-block">
+            <h4>Plan details</h4>
+            <div class="hori-12">
+              <i class="fa-solid fa-check green"></i>
+              <div>100 Fast Prepaid API Calls</div>
+            </div>
+            <div class="hori-12">
+              <i class="fa-solid fa-check green"></i>
+              <div>Motivation When You Need It</div>
+            </div>
+            <div class="hori-12">
+              <i class="fa-solid fa-check green"></i>
+              <div>Pay in Advance</div>
+            </div>
+          </div>
+          <div class="payment-block">
+            <h4>Billing & Payment</h4>
+            <div class="hori-13">
+              <div>Price</div>
+              <div>$1.00 / call</div>
+            </div>
+            <div class="hori-13">
+              <div>Billing Period</div>
+              <div>Monthly</div>
+            </div>
+            <div class="hori-13">
+              <div>Renewal Date</div>
+              <div>August 30, 2024</div>
+            </div>
+          </div>
+          <button class="checkout">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <div>Checkout</div>
+          </button>
+        </div>
+        <div class="colu-7">
+          <div class="hori-8">
+            <h3><span class="blue">Subscription</span> Plan</h3>
+            <div class="hori-10">
+              <i class="fa-regular fa-circle-check"></i>
+              <div>Active</div>
+            </div>
+          </div>
+          <div class="detail-block">
+            <h4>Plan details</h4>
+            <div class="hori-12">
+              <i class="fa-solid fa-check green"></i>
+              <div>100 Fast Prepaid API Calls</div>
+            </div>
+            <div class="hori-12">
+              <i class="fa-solid fa-check green"></i>
+              <div>Motivation When You Need It</div>
+            </div>
+            <div class="hori-12">
+              <i class="fa-solid fa-check green"></i>
+              <div>Pay in Advance</div>
+            </div>
+          </div>
+          <div class="payment-block">
+            <h4>Billing & Payment</h4>
+            <div class="hori-13">
+              <div>Price</div>
+              <div>$1.00 / call</div>
+            </div>
+            <div class="hori-13">
+              <div>Billing Period</div>
+              <div>Monthly</div>
+            </div>
+            <div class="hori-13">
+              <div>Renewal Date</div>
+              <div>August 30, 2024</div>
+            </div>
+          </div>
+          <button class="checkout">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <div>Checkout</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

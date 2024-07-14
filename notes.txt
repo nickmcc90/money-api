@@ -1,0 +1,19 @@
+mkdir money-api
+cd money-api
+git init
+npm init -y
+git add .
+git commit -m "git init"
+git remote add origin link
+git push origin main
+npm i express cors firebase-admin stripe dotenv
+.gitignore
+server.js create
+EAPL steps barebones server.js (exprees, app, port, listen)
+package.json change main, add dev nodemon server.js and npm install --save-dev nodemon
+npm i generate-api-key
+public folder
+index.html
+! for boilerplate code
+app.use(express.static('public'))
+Hit up the html and styling
