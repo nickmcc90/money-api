@@ -30,6 +30,237 @@ We create a price_ID, mode, and line_items package within each if statement.
 Create stripe account
 Make two products, one recurring with metered usage and 1 one-off payment.
 I guess we can't import the price_ID because there is no server-side rendering in node?
-Copy the priceIDs into the route.
+Copy the priceIDs into the route. The price_IDs are at the bottom of product details in stripe.
 
 //timestamp 37:57
+
+After checking for the product status, we generate an API key with
+const newAPIkey = generateAPIkey()
+
+And create a new customer with
+const customer = await stripe.customers.create()
+The api route needs to be async.
+
+After this, we create a customerID, and a checkout session. We give them the
+API key through the url query to the success page!
+
+  const stripeCustomerId = customer.id
+  const session = await stripe.checkout.session.create({
+    customer: stripeCustomerId,
+    metadata: {
+      APIkey: newAPIKey
+      payment_type: product
+    },
+    line_items: line_items,
+    mode: mode,
+    success_url: `${DOMAIN}/success.html?api_key=${newAPIKey}`,
+    cancel_url: `${DOMAIN}/cancel.html`
+  })
+Then we redirect the person out to their url with
+res.redirect(303, session.url)
+
+Copy a paste your secret key into the ENV file.
+Add success.html and cancel.html to the public folder.
+Do the boilerplate code with the same fonts.
+We can access the success API key through a script in the success.html
+
+    const urlParams = window.location.search
+    const { apiKey } = urlParams
+
+We target a div on the screen and put its innerHTML equal to the new API key.
+We send the user back to the home page!
+
+Now we can link up our checkout buttons to run that checkout session button.
+We make the encompassing boxes form tags <form></form> and we have the
+action be our post method of '/create-checkout-session/:product', but
+we actually fill out the product as sub or pre. Have method="POST" here too.
+
+We are able to see a new customer in stripe!
+
+We have a problem with the apiKey, make sure to have a replaceAll('?api_key=', ''),
+where we replace the query param prefix with nothing.
+Now we can check the status of the key, once they copy it.
+For this, we need a get method route.
+
+In our get method to the api, we return a .json message of inspiration. 
+However, we need to authenticate this api call. We grab their key from query parameters,
+and check if there is a key at all first.
+Let's initialize our project with firebase.
+Create a firebase.js file and add the configurations (see firebase.js)
+Don't forget the module.exports = { db }
+-Cloud firestore
+-create database
+-project settings
+-service account
+-get creds
+
+This is like the GCP music store stuff... The creds are top secret so we won't be able
+to upload this to a website where people can actually use this... smh
+
+Now that our db is created, have it in server.js as
+import { db } from './firebase'
+
+The syntax for importing things in node.js is const -- = require(---)
+
+Also, sudo npm i @google-cloud/firestore needs to be installed.
+
+Now we instill our firebase record of the API key being generated:
+  //create firebase record
+  const data = {
+      APIkey: newAPIKey,
+      payment_type: product,
+      customer_id: stripeCustomerId
+      status: null
+  }
+  const dbRes = await db.collection('api-keys').doc(newAPIKey).set(data, { merge: true })
+Now we can start billing people.
+
+Make a get method to check the status of a person's api key.
+This is an async function because we are checking a person's firebase stats.
+We destructure their key from a query, see if its in firebase, and send the status if so.
+
+app.get('/check-status', (req, res) => {
+  const { api_key } = req.query
+  const doc = await db.collection('api-keys').doc(api_key).get()
+  if(!doc.exists) {
+    res.sendStatus(500)
+  } else  {
+    const api_key_status = doc.data()['status']
+    res.status(200).json({ "message": api_key_status})
+  }
+})
+
+Make sure to always await any db calls.
+
+Now we can execute this api call in our index.html by grabbing their api key from the input bar.
+Also grab the button to check status with js.
+Make an async function that grabs a real time value of the input value, then fetchs the api
+call. We can destructure out the status from res.json()
+
+  async function statusCheck() {
+    const api_input = document.querySelector('.js-input').value
+    if(!api_input) {
+      return
+    }
+    try {
+      const res = await fetch(`http://localhost:3005/check-status?api_key=${api_input}`)
+      const { status } = await res.json()
+      console.log("STATUS IS: ", status)
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
+Now we can target the error messages on our page.
+We set their display to none, and alter this with js.
+
+Have display: none (default)
+
+const errmsg = document.querySelector('.ensure')
+errmsg.innerHTML = status
+errmsg.style.display = 'inline'
+
+If the status is null (this is what we set it to in firebase once a key is made),
+then we've gotten passed the code that checks if it doesn't exist. We can display the
+default green text now. However, if the status exist but is not null, then the API
+key expired, which we will code in to change the status once a key has expired*********
+
+If the key doesn't exist which we check in the API call, then our status will
+be "api key doesn't exist" and we bring out the red errmsg text.
+
+Code change: Have a status update underneath the check status button
+that describes the status of the key. If it is a subscription, say the sub
+is still active. If it is prepaid, then list how many calls they have left.
+Include a cancel sub button that displays when a key is a sub.
+
+We have to include code for firebase to update the status of keys when they
+are used (they prepaid one). We have to write the type of purchase as the status when they purchase.
+Like such...
+
+quantity_type equal to either subscription or a number. Number for prepaid purchases.
+
+Don't forget to add hovers to all buttons and transition durations.
+
+Let's link up the cancel subscription button now, with a get api route (with '/delete') and wire up the
+functionality in index.html. We have to make any api route async if we are
+grabbing db info. In deleting a subscription, you have to delete the customer info
+in stripe. This can be done in the delete route. Once you delete the info in stripe,
+you need to delete it in firebase as well, also to be done in the route.
+
+Now we have to make our API key work. Back in our '/api' route, we add some things.
+First, we destructure the query. Next, we check to see if the input is empty, if so
+we return forbidden. Then, we initialize the existence of paid_status and type.
+Then, we have a check if the api_key exists in the system. If no, we return invalid.
+If so, we determine what type of key it is, and set its paid_status to true if its
+status from doc.data() is not null.
+
+    if(status === 'subscription') {
+      paid_status = true
+    } else if (status > 0) {
+      paid_status = true
+    }
+
+Then, if the paid status have been deemed true, we make an api call with a message. Otherwise,
+we send back 403. Within the else if of the prepaid key, we want to decrement the number
+of api calls they have left. We can do this by using the update function with firebase,
+but this is easier:
+
+if (status === 'subscription') {
+  paid_status = true
+} else if (status > 0) {
+  paid_status = true
+  const data = {
+    status: status - 1
+  }
+  await db.collection('api-keys').doc(api_key).set(data, { merge: true })
+}
+
+The set-and-merge-true method is like updating, but easier. Now we can test.rest this up.
+
+If it is a subscription call, we need to increment the usage on stripe within the status==='subscription'
+part of the if statement.
+
+This was some crazy writing in, you need the customer_id from it though...
+
+    const { status, customer_id } = doc.data()
+
+    if(status === 'subscription') {
+      //subscription
+      paid_status = true
+      //stripe updating
+      const customer = await stripe.customers.retrieve(
+        customer_id,
+        { expand: ['subscriptions']}
+      )
+      let subscriptionId = customer?.subscriptions?.data?.[0]?.id
+      const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+      const itemId = subscription?.items?.data[0].id
+
+      const record = stripe.subscriptionItems.createUsageRecord(
+        itemId, {
+          quantity: 1,
+          timestamp: 'now',
+          action: 'increment'
+        }
+      )
+      console.log('record created')
+  }
+
+To make this a live site:
+
+-check the price_IDs to live price_IDs
+-change the stripe secret key to a live one
+
+This app will work with environment variables for each credential within creds.json!!!
+
+The only way I think this wouldn't work is if for some reason you can't make the calls
+to this API with a different domain. I think you need to specify a PORT within server.js,
+have your api routes have their unique wording, like '/api', NOT including the origin, then
+in the calls on the frontend website you put the origin of the server, which is localhost and
+the port.
+
+http://localhost:PORT/apicall
+
+Then, when a call is being made from someone else, I guess it doesn't matter because their api call
+will always be with YOUR predefined origin.

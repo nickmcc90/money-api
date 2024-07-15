@@ -1,0 +1,2 @@
+###
+GET http://localhost:3005/api?api_key=Dw~S1Qs8WUnuYd2Av7VjL1nuUAYCy1

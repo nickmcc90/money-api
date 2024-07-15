@@ -15,6 +15,14 @@
       padding: 0;
     }
 
+    button {
+      transition-duration: 200ms;
+    }
+
+    button:hover {
+      opacity: 0.65
+    }
+
     body {
       font-family: 'Poppins', sans-serif;
       padding-left: 20px;
@@ -67,8 +75,8 @@
     .hori-5,
     .hori-6,
     .hori-7,
-    .circle-container,
     .input-container,
+    .status-update,
     .hori-8,
     .hori-9,
     .hori-10,
@@ -94,20 +102,39 @@
     .hori-3,
     .hori-4,
     .hori-5,
-    .circle-container,
     .hori-12,
     .checkout {
       column-gap: 15px;
       align-items: center;
+    }
+
+    .status-update {
+      align-items: center;
+      justify-content: start;
+      column-gap: 10px;
     }
     
     .checkout {
       width: 120px;
     }
 
-    .status {
+    .status,
+    .cancel {
       width: 150px
     }
+
+
+    .checkout,
+    .status,
+    .hori-11 {
+      background: hsla(200, 80%, 50%, 0.4);
+    }
+
+    .cancel {
+      background-color: lightsalmon;
+      display: none;
+    }
+
 
     .hori-6 {
       justify-content: center;
@@ -115,6 +142,14 @@
       width: 100%;
       column-gap: 10px;
       height: 325px;
+    }
+
+    @media (max-width: 800px) {
+      .hori-6 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
     }
 
     .input-container {
@@ -128,7 +163,8 @@
       color: white;
       background-color: transparent;
       border: none;
-      width: 70%
+      width: 100%;
+      padding: 4px;
     }
 
     .hori-9 {
@@ -155,9 +191,9 @@
 
     .hori-11,
     .status,
+    .cancel,
     .checkout {
       color: white;
-      background: hsla(200, 80%, 50%, 0.4);
       border-radius: 6px;
       border: none;
       font-size: 0.8rem;
@@ -184,10 +220,12 @@
 
     .ensure {
       color: coral;
+      display: none;
     }
 
     .key-authed {
-      color: greenyellow
+      color: greenyellow;
+      display: none;
     }
 
     .green {
@@ -223,7 +261,7 @@
     <div class="colu-3">
       <div class="colu-4">
         <h1>Check Key Status</h1>
-        <div>Please enter your API key below to chekc its status</div>
+        <div>Please enter your API key below to check its status</div>
         <div class="ensure">Please ensure your API key is formatted correctly</div>
         <div class="key-authed">API key authenticated</div>
         <div class="hori-4">
@@ -232,21 +270,24 @@
         </div>
       </div>
       <div class="input-container">
-        <input class='input' type="text" placeholder="API key" />
-        <div class="circle-container">
-          <i class="fa-solid fa-circle"></i>
-          <i class="fa-regular fa-circle"></i>
-        </div>
+        <input class='input js-input' type="text" placeholder="API key" />
       </div>
       <button class="hori-5 status">
         <i class="fa-solid fa-check"></i>
-        <div>Check Status</div>
+        <div class="js-checkstatus">Check Status</div>
+      </button>
+      <div class="status-update">
+
+      </div>
+      <button class="hori-5 cancel">
+        <i class="fa-solid fa-ban"></i>
+        <div class="cancelsub js-cancelsub">Cancel Subscription</div>
       </button>
     </div>
     <div class="colu-5">
       <h1>Billing plans</h1>
       <div class="hori-6">
-        <div class="colu-6">
+        <form action='/create-checkout-session/pre' method="POST" class="colu-6">
           <div class="hori-7">
             <h3><span class="green">Prepaid</span> Plan</h3>
             <div class="hori-9">
@@ -273,23 +314,23 @@
             <h4>Billing & Payment</h4>
             <div class="hori-13">
               <div>Price</div>
-              <div>$1.00 / call</div>
+              <div>$14.50</div>
             </div>
             <div class="hori-13">
               <div>Billing Period</div>
-              <div>Monthly</div>
+              <div>N/A</div>
             </div>
             <div class="hori-13">
               <div>Renewal Date</div>
-              <div>August 30, 2024</div>
+              <div>N/A</div>
             </div>
           </div>
           <button class="checkout">
             <i class="fa-solid fa-cart-shopping"></i>
             <div>Checkout</div>
           </button>
-        </div>
-        <div class="colu-7">
+        </form>
+        <form action='/create-checkout-session/sub' method="POST" class="colu-7">
           <div class="hori-8">
             <h3><span class="blue">Subscription</span> Plan</h3>
             <div class="hori-10">
@@ -301,15 +342,15 @@
             <h4>Plan details</h4>
             <div class="hori-12">
               <i class="fa-solid fa-check green"></i>
-              <div>100 Fast Prepaid API Calls</div>
+              <div>Pay Per Usage Response Generation</div>
             </div>
             <div class="hori-12">
               <i class="fa-solid fa-check green"></i>
-              <div>Motivation When You Need It</div>
+              <div>Unlimited API Calls</div>
             </div>
             <div class="hori-12">
               <i class="fa-solid fa-check green"></i>
-              <div>Pay in Advance</div>
+              <div>Endless Programming Motivation</div>
             </div>
           </div>
           <div class="payment-block">
@@ -331,9 +372,103 @@
             <i class="fa-solid fa-cart-shopping"></i>
             <div>Checkout</div>
           </button>
-        </div>
+        </form>
       </div>
     </div>
   </div>
 </body>
+<script>
+  const status_button = document.querySelector('.js-checkstatus')
+
+  const errmsg = document.querySelector('.ensure')
+
+  const keyauth = document.querySelector('.key-authed')
+
+  const cancelButton = document.querySelector('.cancel')
+
+  const statusUpdate = document.querySelector('.status-update')
+
+  const cancelSub = document.querySelector('.js-cancelsub')
+
+  async function statusCheck() {
+    const api_input = document.querySelector('.js-input').value
+    if(!api_input) {
+      return
+    }
+    try {
+      const res = await fetch(`http://localhost:3005/check-status?api_key=${api_input}`)
+      const { status } = await res.json()
+      console.log("STATUS IS: ", status)
+      if (status === "API key does not exist.") {
+        //API key not authed
+        errmsg.innerHTML = status
+        errmsg.style.display = 'inline'
+        return 
+      }
+      keyauth.style.display = 'inline'
+      if (!status) {
+        //API key authenticated, but has expired (expired will have status null)
+        statusUpdate.innerHTML = `
+          <div class="blue">Current status:</div>
+          <div>Inactive</div>
+        `
+      } else if (status === 'subscription') {
+        //They have a subscription key
+        statusUpdate.innerHTML = `
+          <div class="blue">Subscription:</div>
+          <div>Active</div>
+        `
+        cancelButton.style.display = 'flex'
+      } else {
+        // They have a prepaid plan
+        statusUpdate.innerHTML = `
+          <div class="blue">API calls left:</div>
+          <div>${status}</div>
+        `
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
+  async function cancelSubscription() {
+    const api_input = document.querySelector('.js-input').value
+    if(!api_input) {
+      return
+    }
+    try {
+      const res = await fetch(`http://localhost:3005/delete?api_key=${api_input}`)
+      const { status } = await res.json()
+      if(status === "deleted") {
+        statusUpdate.innerHTML = `
+          <div class="blue">Current status:</div>
+          <div>Inactive</div>
+        `
+      }
+    } catch (err) {
+      console.log(err)
+      statusUpdate.innerHTML = `
+          <div class="blue">Current status:</div>
+          <div>Deletion did not go through</div>
+        `
+    }
+
+  }
+
+  status_button.addEventListener('click', () => {
+    statusCheck()
+  })
+
+  cancelSub.addEventListener('click', () => {
+    cancelSubscription()
+  })
+</script>
 </html>
+
+<!--Bugs to fix...
+-There are some bugs still with cancel subscription popping up and check status
+-There are no docs
+-There is no variablility in the responses from the api calls
+-Probably more
+-->
