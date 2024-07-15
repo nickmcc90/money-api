@@ -9,11 +9,27 @@ git push origin main
 npm i express cors firebase-admin stripe dotenv
 .gitignore
 server.js create
-EAPL steps barebones server.js (exprees, app, port, listen)
+EAPL steps barebones server.js (express, app, port, listen)
 package.json change main, add dev nodemon server.js and npm install --save-dev nodemon
 npm i generate-api-key
 public folder
 index.html
 ! for boilerplate code
-app.use(express.static('public'))
+app.use(express.static('public')) server.js
 Hit up the html and styling
+require('dotenv').config server.js
+Stripe variables (secret key, stripe) server.js
+Domain variable server.js
+Make a .env file and .gitignore it
+
+First route:
+app.post('/create-checkout-session') stuff.
+Checking product if its a sub or pre.
+We create a price_ID, mode, and line_items package within each if statement.
+
+Create stripe account
+Make two products, one recurring with metered usage and 1 one-off payment.
+I guess we can't import the price_ID because there is no server-side rendering in node?
+Copy the priceIDs into the route.
+
+//timestamp 37:57
